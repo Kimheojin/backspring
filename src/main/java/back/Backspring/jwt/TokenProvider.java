@@ -29,27 +29,35 @@ public class TokenProvider implements InitializingBean {
     private final long tokenValidityInMilliseconds;
     private Key key;
 
-    public TokenProvider(
+    //의존성 주입
+    public TokenProvider(//secret 주입
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
     }
 
+    //initrial 뭐시기 오버라이드
+    //decode using base 64 ->  key변수에 할당
     @Override
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+
+    //권한 관련
     public String createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        //yml 시간 받아옴
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
+
+        //토큰 리턴
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
@@ -58,7 +66,10 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
+    //받아서 리턴
     public Authentication getAuthentication(String token) {
+        //claim 이란 사용자에 대한 속성
+        //https://aonee.tistory.com/70
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
@@ -76,6 +87,7 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+    //유효성 검사 해주는거
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

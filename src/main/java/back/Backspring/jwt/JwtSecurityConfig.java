@@ -10,6 +10,8 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
         this.tokenProvider = tokenProvider;
     }
 
+
+    //configure 로직에 주입(overide)를 곁들인
     @Override
     public void configure(HttpSecurity http) {
         http.addFilterBefore(

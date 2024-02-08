@@ -14,6 +14,10 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       #session factory가 시작될 떄 drop 한후 생성, atler, 마무리 할때 drop
+      #data.sql 자동 실행 될듯 -> boot 기능
+
+      #테이블 새로 만들 떄 마다 생각하기
+
       ddl-auto: create-drop
     properties:
       hibernate:
@@ -27,10 +31,18 @@ jwt:
   #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   token-validity-in-seconds: 86400
+  #만룟 시간
 
 logging:
   level:
-    #Back-spring.back
+    #Back-spring.back(오류날 시 바꾸기)
       back: DEBUG
+    #로깅 레벨 종류 정리
+    #Trace : 디버그 레벨이 너무 광범위 한 것을 해결하기 위해 좀 더 상세한 상태를 나타냄
+    #debug : 개발 시 디버그 용도로 사용한 메세지를 나타냄
+    #info : 로그인, 상태 변경과 같은 정보성 메세지를 나타냄
+    #warn : 처리 가능한 문제이지만, 향후 시스템 에러의 원인이 될수 있는 ~
+    #https://xxvigrufv.tistory.com/2
+    #나머진 여기서 보기
 
 

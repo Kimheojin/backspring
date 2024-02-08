@@ -15,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 public class Authority {
 
-    @Id
+    @Id//pk
     @Column(name = "authority_name", length = 50)
     private String authorityName;
 }

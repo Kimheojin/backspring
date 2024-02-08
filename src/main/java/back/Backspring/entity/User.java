@@ -5,16 +5,16 @@ import lombok.*;
 
 import java.util.Set;
 
-@Entity
-@Table(name = "`user`")
+@Entity//데이터 베이스 테이블과 1대1 매핑되는 객체를 뜻함
+@Table(name = "`user`")// 이름 설정
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor//생성자
 @NoArgsConstructor
 public class User {
 
-    @Id
+    @Id//pk
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -32,9 +32,9 @@ public class User {
     private boolean activated;
 
     @ManyToMany
-    @JoinTable(
+    @JoinTable(//유저 권한 다대다
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-    private Set<Authority> authorities;
+    private Set<Authority> authorities;//권한
 }

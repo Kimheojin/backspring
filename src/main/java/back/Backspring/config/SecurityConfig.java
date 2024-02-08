@@ -19,8 +19,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
-@EnableWebSecurity
-@EnableMethodSecurity
+
+@EnableWebSecurity//기본적인 웹 보안 활성화 annotation
+@EnableMethodSecurity//annotation 중에 PreAuthorize 어노테이션을 메소드 단위로 추가하기 위해서 적용
 @Configuration
 public class SecurityConfig {
     private final TokenProvider tokenProvider;
@@ -28,7 +29,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    public SecurityConfig(
+    public SecurityConfig(//jwt 파일 안에 있던거 주입
             TokenProvider tokenProvider,
             CorsFilter corsFilter,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
@@ -48,18 +49,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
+                // token을 사용하는 방식이기 때문에 csrf를 disable
                 .csrf(AbstractHttpConfigurer::disable)
 
+
+                //만든거 추가 jwt 안에 있던거
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(jwtAccessDeniedHandler)
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
-
+                //httpservletRequest를 사용하는 요청들에 대한 접근 제한을 설정
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        //이건 허용(인증 없이
+                        //토큰 없이 들어오므로
+                        //나중에 추가 할때 참ㄴ고하기
                         .requestMatchers("/api/hello", "/api/authenticate", "/api/signup").permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
+                        //나머진 인증을 받아야함
                         .anyRequest().authenticated()
                 )
 

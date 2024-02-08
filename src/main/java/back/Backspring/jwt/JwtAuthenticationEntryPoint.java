@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    //401 발생용
+    //https://developer.mozilla.org/ko/docs/Web/HTTP/Status/401
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
