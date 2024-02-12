@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+//https://devlogofchris.tistory.com/50
+//extends implement 차이
 @Component("userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
@@ -27,7 +30,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userRepository.findOneWithAuthoritiesByUsername(username)
                 .map(user -> createUser(username, user))
                 .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-    }
+    }//권한정보 추가해서 가져올 수 있게 변경
+
+
 
     private org.springframework.security.core.userdetails.User createUser(String username, User user) {
         if (!user.isActivated()) {

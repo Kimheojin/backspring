@@ -29,6 +29,8 @@ public class UserDto {
     @Size(min = 3, max = 50)
     private String nickname;
 
+    //3개를 가지고 있음
+
     private Set<AuthorityDto> authorityDtoSet;
 
     public static UserDto from(User user) {
